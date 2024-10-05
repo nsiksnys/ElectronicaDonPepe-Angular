@@ -1,0 +1,19 @@
+<form formGroup="searchForm" (submit)="submitForm()">
+    <div class="mb-4">
+        <div>
+            <label class="form-label required" for="from">Desde</label>
+            <input type="date" id="from" class="form-control" formControlName="from">
+        </div>
+    </div>
+    <div class="mb-4">
+        <div>
+            <label class="form-label required" for="to">Hasta</label>
+            <input type="date" id="to" class="form-control" formControlName="to">
+        </div>
+    </div>
+    <div class="mb-4">
+        <div>
+            <button type="submit" [disabled]="!searchForm.valid" class="btn btn-primary">Buscar</button>
+        </div>
+    </div>
+</form>

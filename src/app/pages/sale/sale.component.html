@@ -1,0 +1,73 @@
+<h1>Ventas</h1>
+<div class="content">
+    <!-- Add search by date component -->
+    <app-search-form></app-search-form>
+    <!-- Table begins -->
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Nro</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Vendedor</th>
+                <th scope="col">Importe</th>
+                <th scope="col">Detalles</th>
+            </tr>
+        </thead>
+        <tbody>
+        @for (sale of sales; track sale.id) {
+            <tr>
+                <td>{{ sale.id }}</td>
+                <td>{{ sale.salesDate }}</td>
+                <td>{{ sale.salesman.fullName }}</td>
+                <td>{{ sale.total | currency }}</td>
+                <td>
+                    <button type="button" class="btn btn-link" data-bs-toggle="modal" attr.data-bs-target="#showSaleModal{{sale.id}}">Ver</button>
+                    <!-- Modal begins-->
+                    <div class="modal fade" id="showSaleModal{{sale.id}}" tabindex="-1" aria-labelledby="showSaleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title" id="showSaleModalLabel">Detalles de venta</h3>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- modal content -->
+                                    <b>Fecha de venta:</b> {{ sale.salesDate }} <br>
+                                    <b>Vendedor:</b> {{ sale.salesman.fullName }} <br>
+                                    <br>
+                                    <b>Productos:</b>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Id</th>
+                                                <th scope="col">Nombre</th>
+                                                <th scope="col">Precio Unitario</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        @for(product of sale.products; track $index) {
+                                            <tr>
+                                                <td>{{ product.id }}</td>
+                                                <td>{{ product.name }}</td>
+                                                <td>{{ product.unitPrice | currency }}</td>
+                                            </tr>
+                                        }
+                                        </tbody>
+                                    </table>
+                                    <b>Total: {{ sale.total | currency }}</b>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal ends -->
+                </td>
+            </tr>
+        } @empty {
+            <tr>
+                <td colspan="5" class="text-center">No existen resultados</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <!-- Table ends -->
+</div>
