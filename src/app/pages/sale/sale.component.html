@@ -1,7 +1,7 @@
 <h1>Ventas</h1>
 <div class="content">
     <!-- Add search by date component -->
-    <app-search-form></app-search-form>
+    <app-search-form (formSubmitted)="getSearchFormInput($event)"></app-search-form>
     <!-- Table begins -->
     <table class="table">
         <thead>

@@ -1,14 +1,14 @@
-<form formGroup="searchForm" (submit)="submitForm()">
+<form [formGroup]="searchForm" (submit)="submitForm()">
     <div class="mb-4">
         <div>
             <label class="form-label required" for="from">Desde</label>
-            <input type="date" id="from" class="form-control" formControlName="from">
+            <input type="date" id="from" class="form-control" formControlName="from" required>
         </div>
     </div>
     <div class="mb-4">
         <div>
             <label class="form-label required" for="to">Hasta</label>
-            <input type="date" id="to" class="form-control" formControlName="to">
+            <input type="date" id="to" class="form-control" formControlName="to" required>
         </div>
     </div>
     <div class="mb-4">

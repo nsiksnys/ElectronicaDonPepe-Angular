@@ -16,9 +16,19 @@ export class SaleComponent {
   sales: Sale[] = [];
 
   ngOnInit() {
-    this.http.get<Sale[]>("http://localhost:8000/sale")
+    this.http.get<any>("http://localhost:8000/api/sales")
       .subscribe((data) => {
-          this.sales = data;
-      })
+          this.sales = data['member'];
+      });
+  }
+
+  // Send a GET request searching between two dates
+  // If successful, update the sales array
+  getSearchFormInput(formInput: any){
+    //console.log("La busqueda es entre " + formInput.from + " hasta " + formInput.to);
+    this.http.get<any>("http://localhost:8000/api/sales", { params: {'salesDate[after]': formInput.from, 'salesDate[before]': formInput.to} })
+      .subscribe((data) => {
+          this.sales = data['member'];
+      });
   }
 }

@@ -1,21 +1,22 @@
-import { Component, inject } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-search-form',
   standalone: true,
-  imports: [],
+  imports: [ ReactiveFormsModule ],
   templateUrl: './search-form.component.html',
 })
 export class SearchFormComponent {
   formBuilder = inject(FormBuilder);
+  @Output() formSubmitted = new EventEmitter<any>();
 
   searchForm = this.formBuilder.group({
-    from: [''],
-    to: ['']
+    from: [ '', Validators.required ],
+    to: [ '', Validators.required ]
   });
 
   submitForm() {
-    //console.warn(this.searchForm.value); 
+    this.formSubmitted.emit(this.searchForm.value); 
   }
 }
