@@ -17,7 +17,7 @@
         @for (sale of sales; track sale.id) {
             <tr>
                 <td>{{ sale.id }}</td>
-                <td>{{ sale.salesDate }}</td>
+                <td>{{ sale.salesDate | date:'YYYY-MM-dd' }}</td>
                 <td>{{ sale.salesman.fullName }}</td>
                 <td>{{ sale.total | currency }}</td>
                 <td>
@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="modal-body">
                                     <!-- modal content -->
-                                    <b>Fecha de venta:</b> {{ sale.salesDate }} <br>
+                                    <b>Fecha de venta:</b> {{ sale.salesDate | date:'medium' }} <br>
                                     <b>Vendedor:</b> {{ sale.salesman.fullName }} <br>
                                     <br>
                                     <b>Productos:</b>

@@ -1,13 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { Sale } from '../../models/sale.model';
-import { HttpClient } from '@angular/common/http';
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 import { SearchFormComponent } from '../../components/sale/search-form/search-form.component';
 
 @Component({
   selector: 'app-sale',
   standalone: true,
-  imports: [ CurrencyPipe, SearchFormComponent ],
+  imports: [ CurrencyPipe, DatePipe, SearchFormComponent ],
   templateUrl: './sale.component.html'  
 })
 export class SaleComponent {
