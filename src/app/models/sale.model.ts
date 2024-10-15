@@ -2,9 +2,9 @@ import { Product } from "./product.model";
 import { Salesman } from "./salesman.model";
 
 export interface Sale {
-    id: number;
+    id?: number;
     salesDate: Date;
     products: Array<Product>;
-    total: number;
+    total?: number;
     salesman: Salesman;
 }

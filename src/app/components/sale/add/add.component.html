@@ -1,0 +1,38 @@
+<form [formGroup]="addForm" (submit)="submitForm()">
+	<div class="mb-4">
+		<div class="mb-4">
+			<label class="form-label required" for="date">Fecha de venta</label>
+			<input type="datetime-local" id="date" class="form-control" formControlName="date" value="{{ this.addForm.value.date }}" required>
+		</div>
+		<div class="mb-4">
+			<label class="form-label required" for="products">Productos</label>
+			<select id="products" multiple="true" class="form-control" formControlName="products" required>
+				@for (product of apiProducts; track product.id) {
+					<option value="{{ product.id }}">{{ product.name }}</option>
+				}
+				@empty {
+					<option select>No hay valores disponibles</option>
+				}
+			</select>
+		</div>
+		<div class="mb-4">
+			<label class="form-label required" for="salesman">Vendedor</label>
+			<select id="salesman" class="form-control" formControlName="salesman" required>
+				<option value="0">Elija un vendedor</option>
+				@for (salesman of apiSalespeople; track salesman.id) {
+					<option value="{{ salesman.id }}">{{ salesman.fullName }}</option>
+				}
+				@empty {
+					<option select>No hay valores disponibles</option>
+				}
+			</select>
+		</div>
+		<div class="mb-4">
+			<div>
+				<button type="submit" [disabled]="!addForm.valid" class="btn btn-primary">Agregar</button>
+				<button id="addSaleModalFormReset" class="btn btn-secondary" (click)="resetForm()">Limpiar</button>
+			</div>
+		</div>
+	</div>
+</form>
+

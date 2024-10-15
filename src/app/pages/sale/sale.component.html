@@ -2,6 +2,21 @@
 <div class="content">
     <!-- Add search by date component -->
     <app-search-form (formSubmitted)="getSearchFormInput($event)"></app-search-form>
+    <!-- Add register sale component -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSaleModal">Agregar</button>
+    <div class="modal fade" id="addSaleModal" tabindex="-1" aria-labelledby="addSaleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="addSaleModalLabel">Registrar venta</h3>
+                    <button id="addSaleModalClose" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <app-sale-add [apiProducts]="products" [apiSalespeople]="salespeople" (formSubmitted)="addNewSale($event)" />
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Table begins -->
     <table class="table">
         <thead>
