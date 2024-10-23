@@ -1,0 +1,18 @@
+<div class="accordion" id="{{ name }}">
+	<div class="accordion-item">
+		<h2 class="accordion-header" id="heading{{ name | titlecase }}">
+			<button class="accordion-button" type="button" data-bs-toggle="collapse" attr.data-bs-target="#collapse{{ name | titlecase }}" aria-expanded="true" attr.aria-controls="collapse{{ name | titlecase }}">
+				{{ title }}
+			</button>
+		</h2>
+		<div id="collapse{{ name | titlecase }}" class="accordion-collapse collapse" attr.aria-labelledby="heading{{ name | titlecase }}" attr.data-bs-parent="#{{ name }}">
+			<div class="accordion-body">
+                <ng-container *ngTemplateOutlet="body || defaultBody" />
+			</div>
+		</div>
+	</div>
+</div>
+
+<ng-template #defaultBody>
+    <div>This is the accordion body</div>
+</ng-template>
