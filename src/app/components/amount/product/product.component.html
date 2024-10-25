@@ -1,0 +1,73 @@
+<table class="table">
+	<thead>
+		<tr>
+			<th scope="col">Id</th>
+			<th scope="col">Producto (Id - Nombre)</th>
+			<th scope="col">Valor</th>
+			<th scope="col">Acciones</th>
+		</tr>
+	</thead>
+	<tbody>
+		@for (item of amounts; track item.id) {
+			<tr>
+				<td>{{ item.id }}</td>
+				<td>{{item.product.id}} - {{item.product.name}}</td>
+				<td>{{item.amount}}</td>
+				<td>
+					<button type="button" class="btn btn-primary" data-bs-toggle="modal" attr.data-bs-target="#{{ modal.name }}Modal" (click)="fillEditForm($index)">Modificar</button>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+<ng-template #productComissionTable>
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">Nro</th>
+				<th scope="col">Nombre</th>
+				<th scope="col">Acciones</th>
+			</tr>
+		</thead>
+		<tbody>
+			@for (product of products; track $index) {
+				<tr>
+					<td>{{ product.id }}</td>
+					<td>{{ product.name }}</td>
+					<td>
+						<button type="button" class="btn btn-primary" data-bs-toggle="modal" attr.data-bs-target="#{{ modal.name }}Modal" (click)="fillAddForm($index)">Agregar</button>
+					</td>
+				</tr>
+			} @empty {
+				<tr>
+					<td colspan="3">Lista vacía</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</ng-template>
+<ng-template #productCommissionForm>
+	<form [formGroup]="form" (submit)="submitForm()">
+        <div class="mb-4">
+			<div>
+				<label class="form-label required" for="name">Producto</label>
+				<input type="text" id="name" class="form-control" disabled>
+				<input type="text" id="product" hidden formControlName="product" required>
+			</div>
+		</div>
+		<div class="mb-4">
+			<div>
+				<label class="form-label required" for="amount">Monto</label>
+				<input type="text" id="amount" class="form-control" formControlName="amount" required>
+			</div>
+		</div>
+		<div class="mb-4">
+			<div>
+				<button type="submit" id="save" class="btn btn-primary">Guardar</button>
+				<button id="{{ modal.name }}FormReset" class="btn btn-secondary" (click)="resetForm()">Limpiar</button>
+			</div>
+		</div>
+	</form>
+</ng-template>
+<app-accordion [name]="accordion.name" [title]="accordion.title" [body]="productComissionTable" />
+<app-modal [name]="modal.name" [title]="modal.title" [body]="productCommissionForm"/>
