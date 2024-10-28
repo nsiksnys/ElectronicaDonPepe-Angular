@@ -1,0 +1,11 @@
+<h1>Adicionales existentes</h1>
+<div class="content">
+	<h2>Comision por venta</h2>
+	<app-sale-commission [amounts]="saleCommissionAmounts" (formSubmitted)="sendSaleCRequest($event)" />
+    <br/><br/>
+	<h2>Comisión por producto</h2> 
+    <app-product-commission [products]="productsWithoutCommission" [amounts]="productCommissionAmounts" (formSubmitted)="sendProductCRequest($event)" />
+    <br/><br/>
+	<h2>Premios</h2>
+    <app-award [amounts]="awardAmounts" (formSubmitted)="sendAwardRequest($event)" />
+</div>
