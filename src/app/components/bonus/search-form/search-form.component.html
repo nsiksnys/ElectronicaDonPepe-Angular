@@ -1,0 +1,26 @@
+<form [formGroup]="form" (submit)="submitForm()">
+    <label id="desde">Fecha para el cálculo: </label><br>
+    <div class="mb-4">
+        <div>
+            <label class="form-label required" for="date">Fecha</label>
+            <input type="date" id="date" class="form-control" formControlName="date" required>
+        </div>
+    </div>
+    <div class="mb-4">
+        <label class="form-label required" for="salesman">Vendedor(es)</label>
+        <select id="salesman" class="form-control" formControlName="salespeople" multiple required>
+            @for (salesman of apiSalespeople; track salesman.id) {
+                <option value="{{ salesman.id }}">{{ salesman.fullName }}</option>
+            }
+            @empty {
+                <option select>No hay valores disponibles</option>
+            }
+        </select>
+    </div>
+    <div class="mb-4">
+        <div>
+            <button type="submit" [disabled]="!form.valid" class="btn btn-primary">Buscar</button>
+            <button class="btn btn-secondary" (click)="resetForm()">Limpiar</button>
+        </div>
+    </div>
+</form>
