@@ -1,0 +1,29 @@
+<ng-template #productCommissionTable>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Fecha creacion</th>
+                <th scope="col">Producto</th>
+                <th scope="col">Unidades vendidas</th>
+                <th scope="col">Importe comision</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (item of list; track $index) {
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.createdAt | date:'dd-MM-YYYY' }}</td>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.units }}</td>
+                    <td>{{ item.total | currency }}</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <label>
+        <b>Total:</b>
+            {{ total | currency }}
+    </label>
+</ng-template>
+<app-modal [name]="modal.name" [title]="modal.title" [button]="modal.button" [body]="productCommissionTable"/>
