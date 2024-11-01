@@ -1,0 +1,21 @@
+<ng-template #saleCommissionShow>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Fecha creacion</th>
+                <th scope="col">Ventas realizadas</th>
+                <th scope="col">Importe comision</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ saleCommission.id }}</td>
+                <td>{{ saleCommission.createdAt | date:'dd-MM-YYYY' }}</td>
+                <td>{{ saleCommission.units }}</td>
+                <td>{{ saleCommission.total | currency }}</td>
+            </tr>
+        </tbody>
+    </table>
+</ng-template>
+<app-modal [name]="modal.name" [title]="modal.title" [button]="modal.button" [body]="saleCommissionShow"/>

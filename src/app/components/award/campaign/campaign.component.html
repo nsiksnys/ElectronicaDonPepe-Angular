@@ -1,0 +1,29 @@
+<ng-template #campaignAwardTable>
+    <div class="form-group">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Fecha creacion</th>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Importe</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for(item of list; track item.id){
+                    <tr>
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.createdAt | date:'dd-MM-YYYY' }}</td>
+                        <td>{{ item.product.name }}</td>
+                        <td>{{ item.total | currency }}</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <label>
+            <b>Total: </b>
+                {{ total | currency }}
+        </label>
+    </div>
+</ng-template>
+<app-modal [name]="modal.name" [title]="modal.title" [button]="this.modal.button" [body]="campaignAwardTable"/>

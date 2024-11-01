@@ -1,0 +1,13 @@
+<ng-template #bestSalesmanShow>
+    <div class="form-group">
+        <div><label><b>Id: </b></label> <label>{{ award.id }}</label></div>
+        <div><label><b>Fecha creacion: </b></label> <label>{{ award.createdAt | date:'dd-MM-YYYY' }}</label></div>
+        <div>
+            <label><b>Importe: </b></label>
+            <label>
+                    {{ award.total | currency }}
+            </label>
+        </div>
+    </div>
+</ng-template>
+<app-modal [name]="modal.name" [title]="modal.title" [button]="modal.button" [body]="bestSalesmanShow"/>
