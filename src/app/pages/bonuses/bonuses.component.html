@@ -1,0 +1,64 @@
+<!-- render error messages -->
+<app-alert [message]="errorMessage"/>
+<h1>Adicionales</h1>
+<!-- Search form -->
+<app-bonus-search-form [apiSalespeople]="salespeople" (formSubmitted)="calculateBonuses($event)" />
+<hr>
+<table class="table">
+	<thead>
+		<tr>
+			<th scope="col">Fecha creacion</th>
+			<th scope="col">Desde</th>
+			<th scope="col">Hasta</th>
+			<th scope="col">Nombre y Apellido</th>
+			<th scope="col">Comision por venta</th>
+			<th scope="col">Comision por producto</th>
+			<th scope="col">Premio Vendedor</th>
+			<th scope="col">Premio campania</th>
+			<th scope="col">Total</th>
+		</tr>
+	</thead>
+	<tbody>
+		@for(bonus of bonuses; track $index) {
+			<tr>
+				<td>{{ bonus.createdAt | date:'dd-MM-YYYY' }}</td>
+				<td>{{ bonus.dateFrom | date:'dd-MM-YYYY' }}</td>
+				<td>{{ bonus.dateTo | date:'dd-MM-YYYY' }}</td>
+				<td>{{ bonus.salesman.fullName }}</td>
+				<td>
+					@if((bonus.saleComission != null) && (bonus.saleComission != undefined)) {
+						<app-sale-commission-show [saleCommission]="bonus.saleComission" [id]="bonus.id" [button]="bonus.saleComission.total | currency"/>
+					} @else {
+						No
+					}
+				</td>
+				<td>
+					@if ((bonus.productComissions != null) && (bonus.productComissions != undefined) && (bonus.productComissions.length > 0)) {
+						<app-product-commission-index [list]="bonus.productComissions" [id]="bonus.id" [button]="bonus.productCommissionsTotal | currency"/>
+					} @else {
+						No
+					}
+				</td>
+				<td>
+					@if ((bonus.bestSalesmanMonth != null) && (bonus.bestSalesmanMonth != undefined)) {
+						<app-best-salesman-show [award]="bonus.bestSalesmanMonth" [id]="bonus.id" [button]="bonus.bestSalesmanMonth.total | currency"/>
+					} @else {
+						No
+					}
+				</td>
+				<td>
+					@if ((bonus.campaigns != null) && (bonus.campaigns != undefined) && (bonus.campaigns.length > 0)) {
+						<app-award-campaign-index [list]="bonus.campaigns" [id]="bonus.id" [button]="bonus.campaignAwardsTotal | currency"/>
+					} @else {
+						No
+					}
+				</td>
+				<td>
+					{{ bonus.total | currency }}
+				</td>
+			</tr>
+		} @empty {
+			<tr><td colspan="9">No hay adicionales calculados</td></tr>
+		}
+	</tbody>
+</table>
