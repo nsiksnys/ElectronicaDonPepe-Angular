@@ -10,9 +10,9 @@ export interface Bonus {
     dateTo: Date;
     salesman: Salesman;
     saleComission?: SaleCommission;
-    ProductComissions?: ProductComission[];
+    productComissions?: ProductComission[];
     bestSalesmanMonth?: Award;
-    campaigns?: Award;
+    campaigns?: Award[];
     productCommissionsTotal?: number;
     campaignAwardsTotal?: number;
     total?: number;
