@@ -12,8 +12,8 @@ export const routes: Routes = [
         component: SaleComponent
     },
     {
-        path: 'home',
-        title: 'Índice',
+        path: '',
+        title: 'Inicio',
         component: HomeComponent
     },
     {
