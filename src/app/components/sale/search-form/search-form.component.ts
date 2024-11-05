@@ -19,4 +19,8 @@ export class SearchFormComponent {
   submitForm() {
     this.formSubmitted.emit(this.searchForm.value); 
   }
+
+  resetForm() {
+    this.searchForm.reset();
+  }
 }

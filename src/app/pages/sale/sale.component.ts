@@ -6,11 +6,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { SearchFormComponent } from '../../components/sale/search-form/search-form.component';
 import { SaleAddComponent } from "../../components/sale/add/add.component";
+import { SaleShowComponent } from "../../components/sale/show/show.component";
+import { ModalComponent } from "../../components/modal/modal.component";
 
 @Component({
   selector: 'app-sale',
   standalone: true,
-  imports: [ CurrencyPipe, DatePipe, SearchFormComponent, SaleAddComponent ],
+  imports: [ CurrencyPipe, DatePipe, SearchFormComponent, SaleAddComponent, SaleShowComponent, ModalComponent ],
   templateUrl: './sale.component.html'  
 })
 export class SaleComponent {
@@ -19,6 +21,17 @@ export class SaleComponent {
   sales: Sale[] = [];
   products: Product[] = [];
   salespeople: Salesman[] = [];
+  // modal attributes
+  newSaleModal = {
+    name: "addSale",
+    title: "Registrar venta",
+    button: "Agregar"
+  };
+
+  showSaleModal = {
+    name: "showSale",
+    title: "Detalles de venta",
+  };
     
   // Get sales, products and salesman from the endpoint
   ngOnInit() {

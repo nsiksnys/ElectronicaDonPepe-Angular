@@ -3,20 +3,10 @@
     <!-- Add search by date component -->
     <app-search-form (formSubmitted)="getSearchFormInput($event)"></app-search-form>
     <!-- Add register sale component -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSaleModal">Agregar</button>
-    <div class="modal fade" id="addSaleModal" tabindex="-1" aria-labelledby="addSaleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title" id="addSaleModalLabel">Registrar venta</h3>
-                    <button id="addSaleModalClose" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <app-sale-add [apiProducts]="products" [apiSalespeople]="salespeople" (formSubmitted)="addNewSale($event)" />
-                </div>
-            </div>
-        </div>
-    </div>
+    <ng-template #addSaleForm>
+        <app-sale-add [apiProducts]="products" [apiSalespeople]="salespeople" (formSubmitted)="addNewSale($event)" />
+    </ng-template>
+    <app-modal [name]="newSaleModal.name" [title]="newSaleModal.title" [button]="newSaleModal.button" [body]="addSaleForm"/>
     <!-- Table begins -->
     <table class="table">
         <thead>
@@ -36,45 +26,11 @@
                 <td>{{ sale.salesman.fullName }}</td>
                 <td>{{ sale.total | currency }}</td>
                 <td>
-                    <button type="button" class="btn btn-link" data-bs-toggle="modal" attr.data-bs-target="#showSaleModal{{sale.id}}">Ver</button>
-                    <!-- Modal begins-->
-                    <div class="modal fade" id="showSaleModal{{sale.id}}" tabindex="-1" aria-labelledby="showSaleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h3 class="modal-title" id="showSaleModalLabel">Detalles de venta</h3>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <!-- modal content -->
-                                    <b>Fecha de venta:</b> {{ sale.salesDate | date:'medium' }} <br>
-                                    <b>Vendedor:</b> {{ sale.salesman.fullName }} <br>
-                                    <br>
-                                    <b>Productos:</b>
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Id</th>
-                                                <th scope="col">Nombre</th>
-                                                <th scope="col">Precio Unitario</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        @for(product of sale.products; track $index) {
-                                            <tr>
-                                                <td>{{ product.id }}</td>
-                                                <td>{{ product.name }}</td>
-                                                <td>{{ product.unitPrice | currency }}</td>
-                                            </tr>
-                                        }
-                                        </tbody>
-                                    </table>
-                                    <b>Total: {{ sale.total | currency }}</b>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Modal ends -->
+                    <button type="button" class="btn btn-link" data-bs-toggle="modal" attr.data-bs-target="#showSale{{sale.id}}Modal">Ver</button>
+                    <ng-template #showSale>
+                        <app-sale-show [sale]="sale"/>
+                    </ng-template>
+                    <app-modal [name]="showSaleModal.name + sale.id" [title]="showSaleModal.title" [body]="showSale"/>
                 </td>
             </tr>
         } @empty {

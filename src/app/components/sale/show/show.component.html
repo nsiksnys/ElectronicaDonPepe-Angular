@@ -1,0 +1,23 @@
+<b>Fecha de venta:</b> {{ sale.salesDate | date:'medium' }} <br>
+<b>Vendedor:</b> {{ sale.salesman.fullName }} <br>
+<br>
+<b>Productos:</b>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Precio Unitario</th>
+        </tr>
+    </thead>
+    <tbody>
+    @for(product of sale.products; track $index) {
+        <tr>
+            <td>{{ product.id }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.unitPrice | currency }}</td>
+        </tr>
+    }
+    </tbody>
+</table>
+<b>Total: {{ sale.total | currency }}</b>
