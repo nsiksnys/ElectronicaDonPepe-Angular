@@ -1,15 +1,15 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { ModalComponent } from '../../modal/modal.component';
+import { ModalComponent } from '../../../modal/modal.component';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { awardAmount } from '../../../models/awardAmount.model';
+import { awardAmount } from '../../../../models/awardAmount.model';
 
 @Component({
   selector: 'app-award',
   standalone: true,
   imports: [ ModalComponent, ReactiveFormsModule ],
-  templateUrl: './award.component.html'
+  templateUrl: './award-index.component.html'
 })
-export class awardAmountComponent {
+export class AwardAmountIndexComponent {
   @Input() amounts: awardAmount[] = []; // imported from the amount page
   formBuilder = inject(FormBuilder);
   @Output() formSubmitted = new EventEmitter<any>();

@@ -1,13 +1,13 @@
 import { Component, Input } from '@angular/core';
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { SaleCommission } from '../../../models/saleCommission.model';
-import { ModalComponent } from '../../modal/modal.component';
+import { SaleCommission } from '../../../../models/saleCommission.model';
+import { ModalComponent } from '../../../modal/modal.component';
 
 @Component({
   selector: 'app-sale-commission-show',
   standalone: true,
   imports: [ CurrencyPipe, DatePipe, ModalComponent ],
-  templateUrl: './sale.component.html'
+  templateUrl: './sale-c-show.component.html'
 })
 export class SaleCommissionShowComponent {
   @Input() saleCommission!: SaleCommission;

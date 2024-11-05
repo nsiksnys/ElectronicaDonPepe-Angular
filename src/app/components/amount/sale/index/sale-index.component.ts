@@ -1,15 +1,15 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { ModalComponent } from '../../modal/modal.component';
+import { ModalComponent } from '../../../modal/modal.component';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { saleCommissionAmount } from '../../../models/saleCommissionAmount.model';
+import { saleCommissionAmount } from '../../../../models/saleCommissionAmount.model';
 
 @Component({
   selector: 'app-sale-commission',
   standalone: true,
   imports: [ ModalComponent, ReactiveFormsModule ],
-  templateUrl: './sale.component.html'
+  templateUrl: './sale-index.component.html'
 })
-export class saleCommissionAmountComponent {
+export class SaleCommissionAmountIndexComponent {
   @Input() amounts: saleCommissionAmount[] = []; // imported from the amount page
   formBuilder = inject(FormBuilder);
   @Output() formSubmitted = new EventEmitter<any>();

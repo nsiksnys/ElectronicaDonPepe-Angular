@@ -4,14 +4,14 @@ import { awardAmount } from '../../models/awardAmount.model';
 import { productCommissionAmount } from '../../models/productCommissionAmount.model';
 import { saleCommissionAmount } from '../../models/saleCommissionAmount.model';
 import { Product } from '../../models/product.model';
-import { productCommissionAmountComponent } from '../../components/amount/product/product.component';
-import { saleCommissionAmountComponent } from '../../components/amount/sale/sale.component';
-import { awardAmountComponent } from '../../components/amount/award/award.component';
+import { ProductCommissionAmountIndexComponent } from '../../components/amount/product/index/product-index.component';
+import { SaleCommissionAmountIndexComponent } from '../../components/amount/sale/index/sale-index.component';
+import { AwardAmountIndexComponent } from '../../components/amount/award/index/award-index.component';
 
 @Component({
   selector: 'app-amount',
   standalone: true,
-  imports: [ productCommissionAmountComponent, saleCommissionAmountComponent, awardAmountComponent ],
+  imports: [ ProductCommissionAmountIndexComponent, SaleCommissionAmountIndexComponent, AwardAmountIndexComponent ],
   templateUrl: './amount.component.html',
 })
 export class AmountComponent {

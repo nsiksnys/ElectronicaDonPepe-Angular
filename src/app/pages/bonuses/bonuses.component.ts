@@ -5,10 +5,10 @@ import { HttpClient } from '@angular/common/http';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { AlertComponent } from '../../components/alert/alert.component';
 import { BonusSearchFormComponent } from '../../components/bonus/search-form/search-form.component';
-import { ProductCommissionIndexComponent } from '../../components/commission/product/product.component';
-import { SaleCommissionShowComponent } from '../../components/commission/sale/sale.component';
+import { ProductCommissionIndexComponent } from '../../components/commission/product/index/product-c-index.component';
+import { SaleCommissionShowComponent } from '../../components/commission/sale/show/sale-c-show.component';
 import { BestSalesmanMonthComponent } from '../../components/award/best-salesman-month/best-salesman-month.component';
-import { CampaignAwardIndexComponent } from '../../components/award/campaign/campaign.component';
+import { CampaignAwardIndexComponent } from '../../components/award/campaign/index/campaign-index.component';
 
 @Component({
   selector: 'app-bonuses',

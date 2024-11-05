@@ -1,17 +1,17 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { Product } from '../../../models/product.model';
-import { AccordionComponent } from '../../accordion/accordion.component';
-import { ModalComponent } from '../../modal/modal.component';
+import { Product } from '../../../../models/product.model';
+import { AccordionComponent } from '../../../accordion/accordion.component';
+import { ModalComponent } from '../../../modal/modal.component';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { productCommissionAmount } from '../../../models/productCommissionAmount.model';
+import { productCommissionAmount } from '../../../../models/productCommissionAmount.model';
 
 @Component({
   selector: 'app-product-commission',
   standalone: true,
   imports: [ AccordionComponent, ModalComponent, ReactiveFormsModule],
-  templateUrl: './product.component.html'
+  templateUrl: './product-index.component.html'
 })
-export class productCommissionAmountComponent {
+export class ProductCommissionAmountIndexComponent {
   @Input() amounts: productCommissionAmount[] = []; // imported from the amount page
   @Input() products: Product[] = []; // imported from the amount page
   formBuilder = inject(FormBuilder);
