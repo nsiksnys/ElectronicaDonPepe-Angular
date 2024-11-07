@@ -1,5 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { awardAmount } from '../../models/awardAmount.model';
 import { productCommissionAmount } from '../../models/productCommissionAmount.model';
 import { saleCommissionAmount } from '../../models/saleCommissionAmount.model';
@@ -7,6 +6,10 @@ import { Product } from '../../models/product.model';
 import { ProductCommissionAmountIndexComponent } from '../../components/amount/product/index/product-index.component';
 import { SaleCommissionAmountIndexComponent } from '../../components/amount/sale/index/sale-index.component';
 import { AwardAmountIndexComponent } from '../../components/amount/award/index/award-index.component';
+import { ProductService } from '../../services/ProductService';
+import { AwardAmountService } from '../../services/AwardAmountService';
+import { ProductCommissionAmountService } from '../../services/ProductCommissionAmountService';
+import { SaleCommissionAmountService } from '../../services/SaleCommissionAmountService';
 
 @Component({
   selector: 'app-amount',
@@ -16,34 +19,23 @@ import { AwardAmountIndexComponent } from '../../components/amount/award/index/a
 })
 export class AmountComponent {
   title = "Montos";
-  http = inject(HttpClient);
   awardAmounts: awardAmount[] = [];
   productCommissionAmounts: productCommissionAmount[] = [];
   saleCommissionAmounts: saleCommissionAmount[] = [];
   productsWithoutCommission: Product[] = [];
 
+  constructor(private productService: ProductService, private awardAmountService: AwardAmountService, private productCommissionAmountService: ProductCommissionAmountService, private saleCommissionAmountService: SaleCommissionAmountService) { }
+
   // Get amounts from the endpoint
   ngOnInit() {
-    this.http.get<any>("http://localhost:8000/api/award_amounts")
-      .subscribe((data) => {
-          this.awardAmounts = data['member'];
-      });
-   
-      this.http.get<any>("http://localhost:8000/api/product_commission_amounts")
-      .subscribe((data) => {
-          this.productCommissionAmounts = data['member'];
-      });
+    this.awardAmountService.getAll().subscribe((data) => this.awardAmounts = data.member);
+
+    this.productCommissionAmountService.getAll().subscribe((data) => this.productCommissionAmounts = data.member);
     
-      this.http.get<any>("http://localhost:8000/api/sale_commission_amounts")
-      .subscribe((data) => {
-          this.saleCommissionAmounts = data['member'];
-      });
-      
-      // we need this to create new product commissions
-      this.http.get<any>("http://localhost:8000/api/products", { params: {'exists[commissionAmount]': false } } )
-      .subscribe((data) => {
-          this.productsWithoutCommission = data['member'];
-      });
+    this.saleCommissionAmountService.getAll().subscribe((data) => this.saleCommissionAmounts = data.member);
+    
+    // we need this to create new product commissions
+    this.productService.search({'exists[commissionAmount]': false }).subscribe((data) => this.productsWithoutCommission = data.member);
   }
 
   sendProductCRequest(formInput: any) {
@@ -53,12 +45,12 @@ export class AmountComponent {
 
     // Request body
     let requestBody = {
-      product: "http://localhost:8000/api/products/" + formInput.product,
+      product: this.productService.getEndpoint() + formInput.product,
       amount: Number.parseFloat(formInput.amount)
     }
 
     if (formInput.operation == "post") {
-      this.sendPostRequest("http://localhost:8000/api/product_commission_amounts",requestBody)
+      this.productCommissionAmountService.create(requestBody)
         .subscribe((data) => {
           this.productCommissionAmounts.push(data); // if successful, add the new object
           this.productsWithoutCommission.splice(formInput.index,1); // remove the product from the array
@@ -66,7 +58,7 @@ export class AmountComponent {
     }
     
     if (formInput.operation == "put") {
-      this.sendPutRequest("http://localhost:8000/api/product_commission_amounts/" + this.productCommissionAmounts[formInput.index].id, requestBody)
+      this.productCommissionAmountService.edit(this.productCommissionAmounts[formInput.index].id, requestBody)
         .subscribe((data) => {
           this.productCommissionAmounts[formInput.index] = data; // if successful, replace the object
       });
@@ -87,9 +79,9 @@ export class AmountComponent {
       amount: Number.parseFloat(formInput.amount)
     }
 
-    this.sendPutRequest("http://localhost:8000/api/sale_commission_amounts/" + this.saleCommissionAmounts[formInput.index].id, requestBody)
+    this.saleCommissionAmountService.edit(this.saleCommissionAmounts[formInput.index].id, requestBody)
       .subscribe((data) => {
-        this.productCommissionAmounts[formInput.index] = data; // if successful, replace the object
+        this.saleCommissionAmounts[formInput.index] = data; // if successful, replace the object
     });
 
     modalCloseButton.click(); // close the modal
@@ -107,22 +99,12 @@ export class AmountComponent {
       amount: Number.parseFloat(formInput.amount)
     }
 
-    this.sendPutRequest("http://localhost:8000/api/award_amounts/" + this.awardAmounts[formInput.index].id, requestBody)
+    this.awardAmountService.edit(this.awardAmounts[formInput.index].id, requestBody)
       .subscribe((data) => {
         this.awardAmounts[formInput.index] = data; // if successful, replace the object
     });
 
     modalCloseButton.click(); // close the modal
     modalResetFormButton.click(); // reset the form
-  }
-
-  sendPostRequest(url: string, body: any) {
-    let customHeader = new HttpHeaders().set('Content-Type', 'application/ld+json'); // Content-Type has to be application/ld+json
-    return this.http.post<any>(url, body, { headers: customHeader });
-  }
-
-  sendPutRequest(url: string, body: any) {
-    let customHeader = new HttpHeaders().set('Content-Type', 'application/ld+json'); // Content-Type has to be application/ld+json
-    return this.http.put<any>(url, body, { headers: customHeader });
   }
 }
