@@ -1,5 +1,6 @@
+import { environment } from "../../environments/environment";
 export class ApiService {
-    private endpoint = "http://localhost:8000/api/"; // api endpoint from .env file
+    private endpoint = environment.apiUrl; // api endpoint from .env file
 
     getEndpoint(){
         return this.endpoint;

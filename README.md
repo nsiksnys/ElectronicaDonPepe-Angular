@@ -17,8 +17,25 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The appli
 ## Code scaffolding
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
+## Environments
+The `environments` directory contains all the environment related variables, such as api endpoints and login credentials.
+An example file looks like this
+
+    export const environment = {
+        production: false, // environment type
+        apiUrl: "http://my-non-prod-url" // api endpoint url
+    };
+
+Two files, `environment.ts` (production) and `environment.development.ts` (development) are provided. Replace the apiUrl variable with the proper value.
+
+For more information about this topic, please visit the [Build environments](https://angular.dev/tools/cli/environments) section in the official Angular documentation.
+
 ## Build
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+
+To build the `development` environment, add the `--configuration development` option.
+
+To build the `production` environment, add the `--configuration production` option.
 
 ## Screenshots
 
