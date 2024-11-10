@@ -10,11 +10,13 @@ import { ModalComponent } from "../../components/modal/modal.component";
 import { SaleService } from '../../services/SaleService';
 import { ProductService } from '../../services/ProductService';
 import { SalesmanService } from '../../services/SalesmanService';
+import { AlertComponent } from '../../components/alert/alert.component';
+import { ErrorHandlerService } from '../../services/ErrorHandlerService';
 
 @Component({
   selector: 'app-sale',
   standalone: true,
-  imports: [ CurrencyPipe, DatePipe, SearchFormComponent, SaleAddComponent, SaleShowComponent, ModalComponent ],
+  imports: [ CurrencyPipe, DatePipe, SearchFormComponent, SaleAddComponent, SaleShowComponent, ModalComponent, AlertComponent ],
   templateUrl: './sale.component.html'  
 })
 export class SaleComponent {
@@ -22,6 +24,7 @@ export class SaleComponent {
   sales: Sale[] = [];
   products: Product[] = [];
   salespeople: Salesman[] = [];
+  errorMessage = "";
 
   // modal attributes
   newSaleModal = {
@@ -35,22 +38,38 @@ export class SaleComponent {
     title: "Detalles de venta",
   };
 
-  constructor(private saleService: SaleService, private productService: ProductService, private salespeopleService: SalesmanService) {}
+  constructor(private saleService: SaleService, private productService: ProductService, private salespeopleService: SalesmanService, private errorHandlerService: ErrorHandlerService) {}
 
   // Get sales, products and salesman from the endpoint
   ngOnInit() {
-    this.saleService.getAll().subscribe((data) => this.sales = data.member);
+    this.saleService.getAll()
+      .subscribe({
+        next: (data) => { this.sales = data.member },
+        error: (error: Error) => { this.errorMessage = this.errorHandlerService.handle(error) }
+    });
 
-    this.productService.getAll().subscribe((data) => this.products = data.member);
+    this.productService.getAll()
+      .subscribe({
+        next: (data) => { this.products = data.member },
+        error: (error: Error) => { this.errorMessage = this.errorHandlerService.handle(error) }
+    });
 
-    this.salespeopleService.getAll().subscribe((data) => this.salespeople = data.member);
+    this.salespeopleService.getAll()
+      .subscribe({
+        next: (data) => { this.salespeople = data.member },
+        error: (error: Error) => { this.errorMessage = this.errorHandlerService.handle(error) }
+    });
   }
 
   // Send a GET request searching between two dates
   // If successful, update the sales array
   getSearchFormInput(formInput: any){
     //console.log("La busqueda es entre " + formInput.from + " hasta " + formInput.to);
-    this.saleService.search({'salesDate[after]': formInput.from, 'salesDate[before]': formInput.to}).subscribe((data) => this.sales = data.member);
+    this.saleService.search({'salesDate[after]': formInput.from, 'salesDate[before]': formInput.to})
+      .subscribe({
+        next: (data) => { this.sales = data.member },
+        error: (error: Error) => { this.errorMessage = this.errorHandlerService.handle(error) }
+    });
   }
 
   // Send a POST request to create a new sale.
@@ -72,10 +91,14 @@ export class SaleComponent {
         products: newSaleProducts,
         salesman: newSaleSalesman,
         total: 0
-      }).subscribe((data) => {
-        this.sales.push(data); // if successful, add the new Sale object
-        modalCloseButton.click(); // close the modal
-        modalResetFormButton.click(); // reset the form
+      })
+      .subscribe({
+        next: (data) => {
+          this.sales.push(data); // if successful, add the new Sale object
+          modalCloseButton.click(); // close the modal
+          modalResetFormButton.click(); // reset the form
+        },
+        error: (error: Error) => { this.errorMessage = this.errorHandlerService.handle(error) }
     });
   }
 }

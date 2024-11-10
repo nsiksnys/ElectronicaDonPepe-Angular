@@ -4,25 +4,34 @@ import { Campaign } from '../../models/campaign.model';
 import { Product } from '../../models/product.model';
 import { CampaignService } from '../../services/CampaignService';
 import { ProductService } from '../../services/ProductService';
+import { AlertComponent } from '../../components/alert/alert.component';
+import { ErrorHandlerService } from '../../services/ErrorHandlerService';
 
 @Component({
   selector: 'app-campaign',
   standalone: true,
-  imports: [ CurrencyPipe, DatePipe ],
+  imports: [ CurrencyPipe, DatePipe, AlertComponent ],
   templateUrl: './campaign.component.html',
 })
 export class CampaignComponent {
   title = "Campañas";
   campaigns: Campaign[] = [];
   products: Product[] = [];
+  errorMessage: string = "";
 
-  constructor(private campaignService: CampaignService, private productService: ProductService) { }
+  constructor(private campaignService: CampaignService, private productService: ProductService, private errorHandlerService: ErrorHandlerService) { }
 
   // Get campaigns and products from the endpoint
   ngOnInit() {
-    this.campaignService.getAll().subscribe((data) => this.campaigns = data.member);
-    
-    this.productService.search({'exists[campaigns]': false }).subscribe((data) => this.products = data.member);
+    this.campaignService.getAll().subscribe({
+      next: (data) => { this.campaigns = data.member },
+      error: (error: Error) => { this.errorMessage = this.errorHandlerService.handle(error) }
+    });
+
+    this.productService.search({ 'exists[campaigns]': false }).subscribe({
+      next: (data) => { this.products = data.member },
+      error: (error: Error) => { this.errorMessage = this.errorHandlerService.handle(error) }
+    });
   }
 
   // Send a PUT request to mark a campaign as enabled
@@ -44,8 +53,9 @@ export class CampaignComponent {
         product: this.productService.getUrl() + this.campaigns[index].product.id,
         active: status
       },
-    ).subscribe((data) => {
-        this.campaigns[index] = data;
+    ).subscribe({
+      next: (data) => { this.campaigns[index] = data; },
+      error: (error: Error) => { this.errorMessage = this.errorHandlerService.handle(error) }
     });
   }
 
@@ -59,9 +69,12 @@ export class CampaignComponent {
         product: this.productService.getUrl() + productId,
         active: true,
       },
-    ).subscribe((data) => {
-      this.campaigns.push(data); // if successful, add the new object
-      this.products.splice(index,1);
+    ).subscribe({
+      next: (data) => {
+        this.campaigns.push(data); // if successful, add the new object
+        this.products.splice(index, 1);
+      },
+      error: (error: Error) => { this.errorMessage = this.errorHandlerService.handle(error) }
     });
   }
 }

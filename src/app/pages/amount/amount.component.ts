@@ -10,11 +10,13 @@ import { ProductService } from '../../services/ProductService';
 import { AwardAmountService } from '../../services/AwardAmountService';
 import { ProductCommissionAmountService } from '../../services/ProductCommissionAmountService';
 import { SaleCommissionAmountService } from '../../services/SaleCommissionAmountService';
+import { AlertComponent } from '../../components/alert/alert.component';
+import { ErrorHandlerService } from '../../services/ErrorHandlerService';
 
 @Component({
   selector: 'app-amount',
   standalone: true,
-  imports: [ ProductCommissionAmountIndexComponent, SaleCommissionAmountIndexComponent, AwardAmountIndexComponent ],
+  imports: [ ProductCommissionAmountIndexComponent, SaleCommissionAmountIndexComponent, AwardAmountIndexComponent, AlertComponent ],
   templateUrl: './amount.component.html',
 })
 export class AmountComponent {
@@ -23,19 +25,32 @@ export class AmountComponent {
   productCommissionAmounts: productCommissionAmount[] = [];
   saleCommissionAmounts: saleCommissionAmount[] = [];
   productsWithoutCommission: Product[] = [];
+  errorMessage: string = "";
 
-  constructor(private productService: ProductService, private awardAmountService: AwardAmountService, private productCommissionAmountService: ProductCommissionAmountService, private saleCommissionAmountService: SaleCommissionAmountService) { }
+  constructor(private productService: ProductService, private awardAmountService: AwardAmountService, private productCommissionAmountService: ProductCommissionAmountService, private saleCommissionAmountService: SaleCommissionAmountService, private errorHandlerService: ErrorHandlerService) { }
 
   // Get amounts from the endpoint
   ngOnInit() {
-    this.awardAmountService.getAll().subscribe((data) => this.awardAmounts = data.member);
+    this.awardAmountService.getAll().subscribe({
+      next: (data) => { this.awardAmounts = data.member },
+      error: (error: Error) => { this.errorMessage = this.errorHandlerService.handle(error) }
+    });
 
-    this.productCommissionAmountService.getAll().subscribe((data) => this.productCommissionAmounts = data.member);
+    this.productCommissionAmountService.getAll().subscribe({
+      next: (data) => { this.productCommissionAmounts = data.member },
+      error: (error: Error) => { this.errorMessage = this.errorHandlerService.handle(error) }
+    });
     
-    this.saleCommissionAmountService.getAll().subscribe((data) => this.saleCommissionAmounts = data.member);
+    this.saleCommissionAmountService.getAll().subscribe({
+      next: (data) => { this.saleCommissionAmounts = data.member },
+      error: (error: Error) => { this.errorMessage = this.errorHandlerService.handle(error) }
+    });
     
     // we need this to create new product commissions
-    this.productService.search({'exists[commissionAmount]': false }).subscribe((data) => this.productsWithoutCommission = data.member);
+    this.productService.search({ 'exists[commissionAmount]': false }).subscribe({
+      next: (data) => { this.productsWithoutCommission = data.member },
+      error: (error: Error) => { this.errorMessage = this.errorHandlerService.handle(error) }
+    });
   }
 
   sendProductCRequest(formInput: any) {
@@ -51,16 +66,22 @@ export class AmountComponent {
 
     if (formInput.operation == "post") {
       this.productCommissionAmountService.create(requestBody)
-        .subscribe((data) => {
+        .subscribe({
+          next: (data) => {
           this.productCommissionAmounts.push(data); // if successful, add the new object
-          this.productsWithoutCommission.splice(formInput.index,1); // remove the product from the array
+            this.productsWithoutCommission.splice(formInput.index, 1); // remove the product from the array
+          },
+          error: (error: Error) => { this.errorMessage = this.errorHandlerService.handle(error) }
       });
     }
     
     if (formInput.operation == "put") {
       this.productCommissionAmountService.edit(this.productCommissionAmounts[formInput.index].id, requestBody)
-        .subscribe((data) => {
+        .subscribe({
+          next: (data) => {
           this.productCommissionAmounts[formInput.index] = data; // if successful, replace the object
+          },
+          error: (error: Error) => { this.errorMessage = this.errorHandlerService.handle(error) }
       });
     }
     modalCloseButton.click(); // close the modal
@@ -80,8 +101,11 @@ export class AmountComponent {
     }
 
     this.saleCommissionAmountService.edit(this.saleCommissionAmounts[formInput.index].id, requestBody)
-      .subscribe((data) => {
+      .subscribe({
+        next: (data) => {
         this.saleCommissionAmounts[formInput.index] = data; // if successful, replace the object
+        },
+        error: (error: Error) => { this.errorMessage = this.errorHandlerService.handle(error) }
     });
 
     modalCloseButton.click(); // close the modal
@@ -100,8 +124,11 @@ export class AmountComponent {
     }
 
     this.awardAmountService.edit(this.awardAmounts[formInput.index].id, requestBody)
-      .subscribe((data) => {
+      .subscribe({
+        next: (data) => {
         this.awardAmounts[formInput.index] = data; // if successful, replace the object
+        },
+        error: (error: Error) => { this.errorMessage = this.errorHandlerService.handle(error) }
     });
 
     modalCloseButton.click(); // close the modal

@@ -10,6 +10,7 @@ import { BestSalesmanMonthComponent } from '../../components/award/best-salesman
 import { CampaignAwardIndexComponent } from '../../components/award/campaign/index/campaign-index.component';
 import { BonusService } from '../../services/BonusService';
 import { SalesmanService } from '../../services/SalesmanService';
+import { ErrorHandlerService } from '../../services/ErrorHandlerService';
 
 @Component({
   selector: 'app-bonuses',
@@ -23,13 +24,19 @@ export class BonusComponent {
   salespeople: Salesman[] = [];
   errorMessage: string = "";
 
-  constructor(private bonusService: BonusService, private salespeopleService: SalesmanService) {} 
+  constructor(private bonusService: BonusService, private salespeopleService: SalesmanService, private errorHandlerService: ErrorHandlerService) {} 
 
   // Get data from the endpoint
   ngOnInit() {
-    this.bonusService.getAll().subscribe((data) => this.bonuses = data.member);
+    this.bonusService.getAll().subscribe({
+      next: (data) => { this.bonuses = data.member },
+      error: (error: Error) => { this.errorMessage = this.errorHandlerService.handle(error) }
+    });
     
-    this.salespeopleService.getAll().subscribe((data) => this.salespeople = data.member);
+    this.salespeopleService.getAll().subscribe({
+      next: (data) => { this.salespeople = data.member },
+      error: (error: Error) => { this.errorMessage = this.errorHandlerService.handle(error) }
+    });
   }
 
   // Send a GET request and calculate the bonuses
@@ -37,7 +44,10 @@ export class BonusComponent {
   calculateBonuses(formInput: any){
     // salespeople param must be sent with [] so the api knows is an array  
     let calculated: Bonus[] = [];
-    this.bonusService.calculate({'date': formInput.date, 'salespeople[]': formInput.salespeople }).subscribe((data) => calculated = data.member);
+    this.bonusService.calculate({'date': formInput.date, 'salespeople[]': formInput.salespeople }).subscribe({
+      next: (data) => { calculated = data.member },
+      error: (error: Error) => { this.errorMessage = this.errorHandlerService.handle(error) }
+    });
     if (calculated.length == 0) {
       this.errorMessage = "No se encontraron ventas en éste período."
     }
