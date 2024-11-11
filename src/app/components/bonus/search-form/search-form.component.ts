@@ -25,5 +25,7 @@ export class BonusSearchFormComponent {
 
   resetForm() {
     this.form.reset({ date: '', salespeople: '' });
+    // reload the current page
+    window.location.reload();
   }
 }

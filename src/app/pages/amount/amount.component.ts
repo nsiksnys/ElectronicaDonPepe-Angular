@@ -60,7 +60,7 @@ export class AmountComponent {
 
     // Request body
     let requestBody = {
-      product: this.productService.getEndpoint() + formInput.product,
+      product: this.productService.getUrl() + formInput.product,
       amount: Number.parseFloat(formInput.amount)
     }
 
